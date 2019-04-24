@@ -18,10 +18,10 @@ mail_msg = """
 <p><a href="https://blog.bwcxtech.com">这是我的博客</a></p>
 """
 
-message['Subject'] = Header(subject, 'utf-8') # 主题
 message = MIMEText(mail_msg, 'html', 'utf-8') #内容
 message['From'] = "{}".format(sender)         # 发送者
 message['To'] = ",".join(receivers)           # 接收者
+message['Subject'] = Header(subject, 'utf-8') # 主题
 
 try:
     smtpObj = smtplib.SMTP_SSL(mail_host, 465)  # 启用SSL发信, 端口一般是465
