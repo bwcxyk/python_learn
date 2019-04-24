@@ -13,10 +13,10 @@ senderOne = 'yaokun_130@163.com'     # 发件人邮箱(mail_user = 'xx@qq.com')
 receiversOne = ['yaokun_130@163.com','2237553939@qq.com']  # 接收邮箱，可设置QQ邮箱或者其他邮箱
 subject = 'Python SMTP 邮件发送测试'  # 邮件主题
 
-message['Subject'] = subject              # 主题
 message = MIMEText('第一封邮件发送', 'plain', 'utf-8')  # 内容
 message['From'] = "{}".format(senderOne)  # 发送者
 message['To'] = ",".join(receiversOne)    # 接收者
+message['Subject'] = subject              # 主题
 
 try:
     smtpObj = smtplib.SMTP_SSL(mail_host, 465)  # 启用SSL发信, 端口一般是465
