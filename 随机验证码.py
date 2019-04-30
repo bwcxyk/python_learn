@@ -12,7 +12,7 @@ import math, string
 
 #字体的位置，不同版本的系统会有不同
 font_path = 'C:/Windows/Fonts/Arial.ttf'
-#font_path = '/Library/Fonts/Hanzipen.ttc'
+#font_path = '/Library/Fonts/Arial.ttc'
 #生成几位数的验证码
 number = 4
 #生成验证码图片的高度和宽度
@@ -71,6 +71,6 @@ def gene_code(save_path,filename):
     return text
 
 if __name__ == "__main__":
-    gene_code('C:/tmp','test') #会把生成的图片存成/tmp/test.png
-
+    gene_code('C:/tmp','test')
+#    gene_code('/tmp','test') #会把生成的图片存成/tmp/test.png
 #随机验证码代码
