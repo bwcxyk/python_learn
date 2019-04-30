@@ -14,7 +14,7 @@ import math, string
 font_path = 'C:/Windows/Fonts/Arial.ttf'
 #font_path = '/Library/Fonts/Arial.ttc'
 #生成几位数的验证码
-number = 4
+number = 6
 #生成验证码图片的高度和宽度
 size = (100,30)
 #背景颜色，默认为白色
