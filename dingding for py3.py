@@ -17,8 +17,6 @@ if __name__ == '__main__':
 
 # image表情消息
 #xiaoding.send_image(pic_url='http://uc-test-manage-00.umlife.net/jenkins/pic/flake8.png')
-# Link消息
-#xiaoding.send_link(title='万万没想到，李小璐竟然...', text='故事是这样子的...', message_url='http://www.kwongwah.com.my/?p=454748", pic_url="https://pbs.twimg.com/media/CEwj7EDWgAE5eIF.jpg')
 # Markdown消息@所有人
 '''
 xiaoding.send_markdown(title='氧气文字', text='#### 广州天气\n'
