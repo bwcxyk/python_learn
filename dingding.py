@@ -1,28 +1,32 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-import requests
-import json
-import sys
-import os
-
-headers = {'Content-Type': 'application/json;charset=utf-8'}
-api_url = "https://oapi.dingtalk.com/robot/send?access_token=这里填写自己钉钉群自定义机器人的token"
-#需要更换你机器人的地址
-def msg(text):
-    json_text= {
-     "msgtype": "text",
-     "text": {
-         "content": text
-     },
-     "at": {
-         "atMobiles": [
-             "186..." #需要@群里谁
-         ],
-         "isAtAll": True #是否全部@，True为是,False为否
-     }
+#!/usr/bin/env python
+#coding:utf-8
+#zabbix钉钉报警
+import requests,json,sys,os,datetime
+webhook="https://oapi.dingtalk.com/robot/send?access_token=0d2f" #说明：这里改为自己创建的机器人的token值
+user=sys.argv[1]
+text=sys.argv[3]
+data={
+    "msgtype": "text",
+    "text": {
+        "content": text
+    },
+    "at": {
+        "atMobiles": [
+            user #需要@群里谁
+        ],
+        "isAtAll": False #是否全部@，True为是,False为否
     }
-    print requests.post(api_url,json.dumps(json_text),headers=headers).content
-
-if __name__ == '__main__':
-    text = sys.argv[1]
-    msg(text)
+}
+headers = {'Content-Type': 'application/json'}
+x=requests.post(url=webhook,data=json.dumps(data),headers=headers)
+if os.path.exists("/usr/local/zabbix/log/dingding.log"):
+    f=open("/usr/local/zabbix/log/dingding.log","a+")
+else:
+    f=open("/usr/local/zabbix/log/dingding.log","w+")
+f.write("\n"+"--"*30)
+if x.json()["errcode"] == 0:
+    f.write("\n"+str(datetime.datetime.now())+"    "+str(user)+"    "+"发送成功"+"\n"+str(text))
+    f.close()
+else:
+    f.write("\n"+str(datetime.datetime.now()) + "    " + str(user) + "    " + "发送失败" + "\n" + str(text))
+    f.close()
