@@ -19,10 +19,10 @@ data={
 }
 headers = {'Content-Type': 'application/json'}
 x=requests.post(url=webhook,data=json.dumps(data),headers=headers)
-if os.path.exists("/usr/local/zabbix/log/dingding.log"):
-    f=open("/usr/local/zabbix/log/dingding.log","a+")
+if os.path.exists("/usr/local/zabbix/logs/dingding.log"):
+    f=open("/usr/local/zabbix/logs/dingding.log","a+")
 else:
-    f=open("/usr/local/zabbix/log/dingding.log","w+")
+    f=open("/usr/local/zabbix/logs/dingding.log","w+")
 f.write("\n"+"--"*30)
 if x.json()["errcode"] == 0:
     f.write("\n"+str(datetime.datetime.now())+"    "+str(user)+"    "+"发送成功"+"\n"+str(text))
