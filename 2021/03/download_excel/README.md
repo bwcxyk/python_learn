@@ -29,5 +29,3 @@ pip install -r requirements.txt
 ```cmd
 python main.py file.xlsx
 ```
-
-注意事项：表格列名下留一空行
