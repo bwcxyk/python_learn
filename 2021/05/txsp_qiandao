@@ -1,0 +1,43 @@
+# -*- coding: utf8 -*-
+
+import requests
+import re
+import time
+from urllib.parse import quote
+
+def start():
+    try:
+        s = requests.session()
+
+        cookie1 = 'TXSP_COOKIE'
+        
+        this_time = int(round(time.time() * 1000))
+
+        login_url = 'https://vip.video.qq.com/fcgi-bin/comm_cgi?name=hierarchical_task_system&cmd=2&_=' + str(this_time)
+
+        headers={
+            'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.204 Safari/537.36',
+            'Cookie': cookie1
+        }
+
+        res =s.get(login_url,headers=headers).text
+        
+        print('访问结果：'+res)
+
+        if 'Account Verify Error' in res:
+            print('cookies失效，通知SERVER酱！')
+            requests.get('https://sc.ftqq.com/SCKEY.send?text=' + quote('腾讯视频自动签到失败~'+time.strftime('%Y.%m.%d',time.localtime(time.time()))) +'&desp='+quote('cookies失效，请更新！\n'))
+        else:
+            print('签到完成')
+
+    except Exception as e:
+        print("地址访问失败，通知SERVER酱！")
+        requests.get('https://sc.ftqq.com/SCKEY.send?text=' + quote('腾讯视频自动签到失败~'+time.strftime('%Y.%m.%d',time.localtime(time.time()))) +'&desp='+quote('异常代码：\n'+str(e)))
+
+
+def main_handler(event, context):
+    return start()
+
+
+if __name__ == '__main__':
+    start()
