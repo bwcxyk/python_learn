@@ -3,7 +3,7 @@
 """
 @Time    : 2021/3/28 9:20
 @Author  : YaoKun
-@Usage   : pdf2word 
+@Usage   : python pdf2word2.py
 """
 
 import os
