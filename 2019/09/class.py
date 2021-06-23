@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 __author__ = 'Fighter.Kun'
-__time__ = '2019/9/6 14:52'
+__time__ = '2019/9x9/6 14:52'
 
 '''
 class MyClass:

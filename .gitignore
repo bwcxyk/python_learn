@@ -63,3 +63,4 @@ target/
 *local_settings.py
 .idea/*
 media/*
+*.un~

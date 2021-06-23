@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 __author__ = 'YaoKun'
-__time__ = '2020/5/26 9:56'
+__time__ = '2020/5/26 9x9:56'
 
 import turtle
 bob = turtle.Turtle()
