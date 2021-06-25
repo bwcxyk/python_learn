@@ -4,12 +4,15 @@
 
 # tcp server
 import socket
-import time
+# import time
 import threading
-from JinkoRobot import *
+# from JinkoRobot import *
+from ChatWithRobot.JinkoRobot import JinkoRobot
 
 
 # 应用程序入口类
+
+
 class ApplicationServer:
 
     # 构造函数初始化 socket
