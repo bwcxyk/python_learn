@@ -27,4 +27,4 @@ targets = ['auth_openid']
 for part in parts:
     for target in targets:
         method_name = 'compatible_{}_of_{}'.format(target, part)
-        print()
+        print(f"{method_name}")
