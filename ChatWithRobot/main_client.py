@@ -7,11 +7,15 @@ import socket
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print("正在和张三连线...")
-sock.connect(('localhost', 8005))
-print("")
+try:
+	sock.connect(('localhost', 8005))
+	print("")
+except:
+	exit()
+
 
 while True:
-	speak = input("和张三说点什么:")
+	speak = input("和张三说点什么:（退出请输入quit）")
 
 	if speak == "quit":
 		break
