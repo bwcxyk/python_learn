@@ -55,7 +55,7 @@ def pdf_to_word(pdf_file_path, word_file_path):
 
 def main():
     config_parser = ConfigParser()
-    config_parser.read('config.cfg')
+    config_parser.read('hconfig.cfg')
     config = config_parser['default']
 
     tasks = []

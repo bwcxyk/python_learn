@@ -63,7 +63,7 @@ def refresh_down_time():
             # 倒计时结束
             down_label.config(text='已到下班时间')
             # 自动关机，定时一分钟关机，可以取消
-            # down_label.config(text='下一分钟将自动关机')
+            # down_label.hconfig(text='下一分钟将自动关机')
             # os.system('shutdown -s -f -t 60')
             break
         diff_time -= 1
