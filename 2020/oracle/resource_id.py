@@ -6,11 +6,13 @@ __time__ = '2020/7/13 14:23'
 import cx_Oracle
 from pprint import pprint
 from sys import modules
+
+
 def main():
     # 建立连接
-    #db = cx_Oracle.connect('tms_user_1', 'tms_uat_pwd', '192.168.1.181:1521/orcl')
-    #db1 = cx_Oracle.connect('tms_user_1/tms_uat_pwd@192.168.1.181:1521/orcl')
-    connection = cx_Oracle.connect('tms_user_1/tms_uat_pwd@192.168.1.181/orcl')
+    # db = cx_Oracle.connect('zhangsan', '123456', '192.168.1.1:1521/orcl')
+    # db1 = cx_Oracle.connect('zhangsan/123456@192.168.1.1:1521/orcl')
+    connection = cx_Oracle.connect('zhangsan/123456@192.168.1.1/orcl')
     print(connection.version)
 
     # 创建游标
@@ -42,6 +44,7 @@ def main():
 
     # 关闭连接
     connection.close()
+
 
 if __name__ == '__main__':
     main()

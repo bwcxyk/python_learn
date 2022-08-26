@@ -7,18 +7,18 @@ import cx_Oracle
 from pprint import pprint
 from sys import modules
 
-connection = cx_Oracle.connect('tms_user_1/tms_uat_pwd@192.168.1.181/orcl')
-cursor = connection.cursor ()
+connection = cx_Oracle.connect('zhangsan/123456@192.168.1.1/orcl')
+cursor = connection.cursor()
 
 try:
     # 解析sql语句
     cursor.parse("select *  dual")
     # 捕获SQL异常
 except cx_Oracle.DatabaseError as e:
-    print(e)   # ORA-00923: 未找到要求的 FROM 关键字
+    print(e)  # ORA-00923: 未找到要求的 FROM 关键字
 
 # 执行sql 语句
-cursor.execute ("select * from dual")
+cursor.execute("select * from dual")
 # 提取一条数据，返回一个元祖
 row = cursor.fetchone()
 pprint(row)  # ('X',)
