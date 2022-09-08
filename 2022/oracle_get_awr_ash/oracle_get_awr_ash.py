@@ -54,17 +54,21 @@ def get_awr():
         # 获取起止点的 snap_id
         your_time = "your_time"
         # sql 语句结尾不要有分号~
-        sql = f'''select distinct(a.snap_id) as snap_id 
-  from dba_hist_snapshot a
-  where a.dbid = {dbid}
-    and extract(day from (a.end_interval_time - to_timestamp('{your_time}', 'yyyy-mm-dd hh24:mi'))) * 86400 +
-    extract(hour from (a.end_interval_time - to_timestamp('{your_time}', 'yyyy-mm-dd hh24:mi'))) * 3600 +
-    extract(minute from (a.end_interval_time - to_timestamp('{your_time}', 'yyyy-mm-dd hh24:mi'))) * 60 +
-    extract(second from (a.end_interval_time - to_timestamp('{your_time}', 'yyyy-mm-dd hh24:mi'))) < 60
-    and extract(day from (a.end_interval_time - to_timestamp('{your_time}', 'yyyy-mm-dd hh24:mi'))) * 86400 +
-    extract(hour from (a.end_interval_time - to_timestamp('{your_time}', 'yyyy-mm-dd hh24:mi'))) * 3600 +
-    extract(minute from (a.end_interval_time - to_timestamp('{your_time}', 'yyyy-mm-dd hh24:mi'))) * 60 +
-    extract(second from (a.end_interval_time - to_timestamp('{your_time}', 'yyyy-mm-dd hh24:mi'))) >= 0
+  #       sql = f'''select distinct(a.snap_id) as snap_id
+  # from dba_hist_snapshot a
+  # where a.dbid = {dbid}
+  #   and extract(day from (a.end_interval_time - to_timestamp('{your_time}', 'yyyy-mm-dd hh24:mi'))) * 86400 +
+  #   extract(hour from (a.end_interval_time - to_timestamp('{your_time}', 'yyyy-mm-dd hh24:mi'))) * 3600 +
+  #   extract(minute from (a.end_interval_time - to_timestamp('{your_time}', 'yyyy-mm-dd hh24:mi'))) * 60 +
+  #   extract(second from (a.end_interval_time - to_timestamp('{your_time}', 'yyyy-mm-dd hh24:mi'))) < 60
+  #   and extract(day from (a.end_interval_time - to_timestamp('{your_time}', 'yyyy-mm-dd hh24:mi'))) * 86400 +
+  #   extract(hour from (a.end_interval_time - to_timestamp('{your_time}', 'yyyy-mm-dd hh24:mi'))) * 3600 +
+  #   extract(minute from (a.end_interval_time - to_timestamp('{your_time}', 'yyyy-mm-dd hh24:mi'))) * 60 +
+  #   extract(second from (a.end_interval_time - to_timestamp('{your_time}', 'yyyy-mm-dd hh24:mi'))) >= 0
+  #       '''
+        sql = f'''select min(a.snap_id) as snap_id from dba_hist_snapshot a
+        where a.dbid = {dbid} 
+        and a.end_interval_time>=to_date('{your_time}','yyyy-mm-dd hh24:mi')
         '''
         start_sql = sql.replace("your_time", i[0])
         end_sql = sql.replace("your_time", i[1])
