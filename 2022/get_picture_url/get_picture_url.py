@@ -43,19 +43,18 @@ def get_data():
         tid = ([item[1].value])
         taskid = ''.join(tid)
         sql = """SELECT TASK_ID,
-               REPLACE(OP_PICURL, 'group', 'https://file.yuanfusc.com/group') AS OP_PICURL
-        FROM (
-                 WITH TEMP AS (SELECT ROWNUM ROWNUM1, TASK_ID, OP_PICURL
-                               FROM "TMS_APP_TASK_ORDER_DETAIL"
-                               WHERE OP_CODE = '004'
-                                 AND TASK_ID = :taskid)
-                 SELECT TASK_ID,
-                        REGEXP_SUBSTR(OP_PICURL, '[^,]+', 1, LEVEL) OP_PICURL
-                 FROM TEMP
-                 CONNECT BY PRIOR ROWNUM1 = ROWNUM1
-                        AND LEVEL <= REGEXP_COUNT(OP_PICURL, '[^,]+')
-                        AND PRIOR DBMS_RANDOM.VALUE() IS NOT NULL
-             )"""
+       REPLACE(OP_PICURL, 'group', 'https://file.yuanfusc.com/group') AS OP_PICURL
+FROM (
+         WITH TEMP AS (SELECT ROWNUM ROWNUM1, TASK_ID, OP_PICURL
+                       FROM "TMS_APP_TASK_ORDER_DETAIL"
+                       WHERE OP_CODE = '004' AND TASK_ID = : taskid)
+         SELECT TASK_ID,
+                REGEXP_SUBSTR(OP_PICURL, '[^,]+', 1, LEVEL) OP_PICURL
+         FROM TEMP
+         CONNECT BY PRIOR ROWNUM1 = ROWNUM1
+                AND LEVEL <= REGEXP_COUNT(OP_PICURL, '[^,]+')
+                AND PRIOR DBMS_RANDOM.VALUE() IS NOT NULL
+     )"""
         cursor.execute(sql, taskid=taskid)
 
         # 循环遍历结果集，获取所有运单回单地址
