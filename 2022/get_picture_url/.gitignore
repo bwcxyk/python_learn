@@ -1,0 +1,8 @@
+.vscode/
+.idea
+
+run_config.py
+
+__pycache__/
+
+*.html
