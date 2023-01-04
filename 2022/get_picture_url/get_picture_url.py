@@ -12,11 +12,11 @@ import time
 import sys
 # 读取配置文件，请一定要配置好哦，具体的配置说明请看 run_config_template.py 文件的说明
 from run_config import oracle_connect_string, save_folder
+
 cx_Oracle.init_oracle_client(lib_dir=r"D:\Program Files\instantclient_19_3")
 
 global conn
 global cursor
-
 
 start_time = time.time()
 
@@ -40,21 +40,25 @@ def get_data():
     sheet = rwb["Sheet1"]
     # 遍历获取所有运单id
     for item in sheet.rows:
-        tid = ([item[1].value])
+        # 取表格第三列值
+        tid = ([item[2].value])
+        # print("tid数据类型", type(tid))
+        # 转换为字符串
         taskid = ''.join(tid)
         sql = """SELECT TASK_ID,
-       REPLACE(OP_PICURL, 'group', 'https://file.yuanfusc.com/group') AS OP_PICURL
-FROM (
-         WITH TEMP AS (SELECT ROWNUM ROWNUM1, TASK_ID, OP_PICURL
-                       FROM "TMS_APP_TASK_ORDER_DETAIL"
-                       WHERE OP_CODE = '004' AND TASK_ID = : taskid)
-         SELECT TASK_ID,
-                REGEXP_SUBSTR(OP_PICURL, '[^,]+', 1, LEVEL) OP_PICURL
-         FROM TEMP
-         CONNECT BY PRIOR ROWNUM1 = ROWNUM1
-                AND LEVEL <= REGEXP_COUNT(OP_PICURL, '[^,]+')
-                AND PRIOR DBMS_RANDOM.VALUE() IS NOT NULL
-     )"""
+               REPLACE(OP_PICURL, 'group', 'https://file.yuanfusc.com/group') AS OP_PICURL
+        FROM (
+                 WITH TEMP AS (SELECT ROWNUM ROWNUM1, TASK_ID, OP_PICURL
+                               FROM "TMS_APP_TASK_ORDER_DETAIL"
+                               WHERE OP_CODE = '004'
+                                 AND TASK_ID = :taskid)
+                 SELECT TASK_ID,
+                        REGEXP_SUBSTR(OP_PICURL, '[^,]+', 1, LEVEL) OP_PICURL
+                 FROM TEMP
+                 CONNECT BY PRIOR ROWNUM1 = ROWNUM1
+                        AND LEVEL <= REGEXP_COUNT(OP_PICURL, '[^,]+')
+                        AND PRIOR DBMS_RANDOM.VALUE() IS NOT NULL
+             )"""
         cursor.execute(sql, taskid=taskid)
 
         # 循环遍历结果集，获取所有运单回单地址
