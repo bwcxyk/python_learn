@@ -36,15 +36,21 @@ def oracle_close():
 
 
 def get_data():
+    print(time.strftime('%Y-%m-%d %H:%M:%S'), "开始数据查询")
     rwb = load_workbook(filename)
     sheet = rwb["Sheet1"]
     # 遍历获取所有运单id
     for item in sheet.rows:
         # 取表格第三列值
         tid = ([item[2].value])
-        # print("tid数据类型", type(tid))
         # 转换为字符串
-        taskid = ''.join(tid)
+        if item[2].value is not None:
+            taskid = ''.join(tid)
+        else:
+            continue 
+		# print("tid数据类型", type(tid))
+        # 转换为字符串
+        # taskid = ''.join(tid)
         sql = """SELECT TASK_ID,
                REPLACE(OP_PICURL, 'group', 'https://file.yuanfusc.com/group') AS OP_PICURL
         FROM (
