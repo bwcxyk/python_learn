@@ -1,6 +1,7 @@
 .vscode/*
 .idea
 run_config.py
+*.xlsx
 query.sql
 
 # Byte-compiled / optimized / DLL files

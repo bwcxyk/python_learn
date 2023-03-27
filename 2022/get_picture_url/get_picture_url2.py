@@ -22,6 +22,7 @@ start_time = time.time()
 
 def oracle_connect(connect_string: str):
     """连接 oracle"""
+    global conn, cursor
     conn = cx_Oracle.connect(connect_string)
     cursor = conn.cursor()
     return conn, cursor
@@ -39,9 +40,9 @@ def get_data():
     # 遍历获取所有运单id
     for item in sheet.rows:
         # 取表格第三列值
-        tid = ([item[2].value])
+        tid = ([item[1].value])
         # 转换为字符串
-        if item[2].value is not None:
+        if tid is not None:
             keyword = ''.join(tid)
         else:
             continue 
