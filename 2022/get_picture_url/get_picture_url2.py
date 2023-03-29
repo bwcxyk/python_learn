@@ -42,7 +42,7 @@ def get_data():
         # 取表格第三列值
         tid = ([item[1].value])
         # 转换为字符串
-        if tid is not None:
+        if item[1].value is not None:
             keyword = ''.join(tid)
         else:
             continue 
