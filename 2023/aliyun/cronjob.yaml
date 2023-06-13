@@ -1,0 +1,29 @@
+kind: CronJob
+apiVersion: batch/v1beta1
+metadata:
+  name: aliyun
+  namespace: default
+spec:
+  schedule: 0 0 * * *
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: aliyun
+              image: 'aliyun:security_group'
+              env:
+                - name: access_key
+                  valueFrom:
+                    secretKeyRef:
+                      name: aliyun
+                      key: access_key
+                - name: access_secret
+                  valueFrom:
+                    secretKeyRef:
+                      name: aliyun
+                      key: access_secret
+                - name: sg_id
+                  value: sg-uf63rv61om7cz30diy5x
+              imagePullPolicy: IfNotPresent
+          restartPolicy: Never
