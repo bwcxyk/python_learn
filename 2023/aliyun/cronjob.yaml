@@ -25,5 +25,12 @@ spec:
                       key: access_secret
                 - name: sg_id
                   value: sg-uf63rv61om7cz30diy5x
+              volumeMounts:
+                - name: volume-cronjob
+                  mountPath: /data
               imagePullPolicy: IfNotPresent
+          volumes:
+            - name: volume-cronjob
+              persistentVolumeClaim:
+                claimName: cronjob
           restartPolicy: Never

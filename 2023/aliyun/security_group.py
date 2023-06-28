@@ -47,8 +47,8 @@ def update_security_group():
         exit()
 
     # 读取上一次的公网 IP
-    if os.path.exists("ip.txt"):
-        with open("ip.txt", "r") as f:
+    if os.path.exists("/data/ip.txt"):
+        with open("/data/ip.txt", "r") as f:
             old_ip = f.read().strip()
     else:
         old_ip = ""
@@ -84,7 +84,7 @@ def update_security_group():
                 print(f"端口{port}授权失败: {e}")
 
         # 将新的公网 IP 写入文件
-        with open("ip.txt", "w") as f:
+        with open("/data/ip.txt", "w") as f:
             f.write(ip)
 
         print("安全组授权更新成功。")
