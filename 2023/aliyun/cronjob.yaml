@@ -23,8 +23,14 @@ spec:
                     secretKeyRef:
                       name: aliyun
                       key: access_secret
+                - name: region_id
+                  value: cn-shanghai
                 - name: sg_id
-                  value: sg-uf63rv61om7cz30diy5x
+                  value: sg-uf6czvvb79boxtb9dod7
+                - name: ip_file
+                  value: /data/ip.txt
+                - name: port_list
+                  value: '22,1521,3306,5432,6379,27017'
               volumeMounts:
                 - name: volume-cronjob
                   mountPath: /data
