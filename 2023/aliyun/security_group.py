@@ -9,6 +9,7 @@
 import os
 import requests
 import json
+import redis
 from aliyunsdkcore.client import AcsClient
 from aliyunsdkecs.request.v20140526 import DescribeSecurityGroupsRequest, AuthorizeSecurityGroupRequest
 from aliyunsdkecs.request.v20140526.RevokeSecurityGroupRequest import RevokeSecurityGroupRequest
@@ -20,19 +21,28 @@ access_key = os.getenv("access_key")
 access_secret = os.getenv('access_secret')
 region_id = os.getenv('region_id')
 sg_id = os.getenv('sg_id')
-ip_file = os.getenv('ip_file')
 port_list_str = os.getenv('port_list')
 port_list = [int(port.strip()) for port in port_list_str.split(',')]
 
 # 连接阿里云
 client = AcsClient(access_key, access_secret, region_id)
 
+# 连接到Redis服务器
+redis_host = os.getenv('redis_host')
+redis_port = int(os.getenv('redis_port'))
+redis_pass = os.getenv('redis_password')
+redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=0, password=redis_pass, decode_responses=True)
+
 
 def get_old_ip():
-    if os.path.exists(ip_file):
-        with open(ip_file, "r") as file:
-            return file.read().strip()
+    ip = redis_client.get("aliyun:old_ip")
+    if ip:
+        return ip
     return ""
+
+
+def update_old_ip():
+    redis_client.set("aliyun:old_ip", new_ip)
 
 
 def get_current_public_ip():
@@ -96,10 +106,8 @@ if __name__ == '__main__':
         if old_ip:
             remove_authorization()
 
-        # 更新旧IP
-        with open(ip_file, "w") as f:
-            f.write(new_ip)
-            print(f"Updated old IP to {new_ip}")
+        update_old_ip()  # 更新旧IP到Redis
+        print(f"Updated old IP to {new_ip} in Redis")
         print("安全组授权更新成功。")
     else:
         print("公网IP未改变，无需更新安全组授权。")
