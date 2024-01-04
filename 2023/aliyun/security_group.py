@@ -46,8 +46,9 @@ def update_old_ip():
 
 
 def get_current_public_ip():
-    return requests.get("https://ip.42.pl/raw").text.strip()
-
+    # return requests.get("http://ip.42.pl/raw").text.strip()
+    # return requests.get("https://api.ip.sb/ip").text.strip()
+    return requests.get("https://www.ipplus360.com/getIP").json()['data']
 
 def describe_security_group():
     # 获取指定的安全组
