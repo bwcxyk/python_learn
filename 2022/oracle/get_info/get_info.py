@@ -13,80 +13,89 @@ import sys
 # 读取配置文件，请一定要配置好哦，具体的配置说明请看 run_config_template.py 文件的说明
 from run_config import oracle_connect_string, save_folder
 
+# 设置 Oracle 客户端库路径
 cx_Oracle.init_oracle_client(lib_dir=r"D:\Program Files\instantclient_19_3")
 
-conn = None
-cursor = None
-start_time = time.time()
-
-
 def oracle_connect(connect_string: str):
-    """连接 oracle"""
-    global conn, cursor
-    conn = cx_Oracle.connect(connect_string)
-    cursor = conn.cursor()
-    return conn, cursor
+    """连接 Oracle 数据库"""
+    return cx_Oracle.connect(connect_string)
 
-def oracle_close():
-    
-    """关闭 oracle 连接"""
-    cursor.close()
-    conn.close()
+def get_sql():
+    """获取查询语句"""
+    with open('query.sql', 'r') as f:
+        sql = f.read()
+    return sql
 
-def get_data():
-    print(time.strftime('%Y-%m-%d %H:%M:%S'), "开始数据查询")
+def read_data(filename: str):
+    """从 excel 中读取数据"""
     rwb = load_workbook(filename)
     sheet = rwb["Sheet1"]
-    # 遍历获取所有运单id
-    for item in sheet.rows:
-        # 取表格第一列值
-        column = item[0].value
-        tid = [column]
-        # 转换为字符串
-        if column is not None:
-            keyword = ''.join(tid)
-        else:
+    data = []
+    for i, row in enumerate(sheet.iter_rows(values_only=True)):
+        if i == 0:  # 跳过表头
             continue
-		# print("tid数据类型", type(tid))
-        with open('query.sql', 'r') as f:
-            sql = f.read()
-        cursor.execute(sql, query=keyword)
+        data.append(row[0])  # 添加第一列的数据
+    return data
 
-        # 循环遍历结果集，获取所有运单回单地址
-        for se_data in cursor:
-            select_data = list(se_data)
-            picture_url.append(select_data)
-            # picture_url.append(tuple(select_data))
-    print(time.strftime('%Y-%m-%d %H:%M:%S'), "数据查询完成")
-    # print("------------------------picture_url------------------------\n", picture_url)
+def get_data(cursor, filename: str):
+    """执行查询并获取数据"""
+    print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} 开始读取数据...")
+    data = read_data(filename)  # 从 Excel 中读取数据
+    print(f"共读取 {len(data)} 条数据")
 
+    print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} 开始获取查询语句...")
+    sql = get_sql()  # 从文件中读取查询语句
+    batch_size = 1000  # 每批查询的大小
+    results = []
 
-def save_file():
-    # 处理数据格式
-    print(time.strftime('%Y-%m-%d %H:%M:%S'), "开始写入文件")
+    print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} 开始执行查询...")
+    # 将数据分成批次
+    for i in range(0, len(data), batch_size):
+        batch_data = data[i:i+batch_size]
+
+        # 构建SQL查询语句
+        placeholders = ','.join([':%s' % (i+1) for i in range(len(batch_data))])
+        formatted_sql = sql.format(placeholders)
+
+        # 执行查询并获取结果
+        print(f"执行查询，批次 {i//batch_size + 1}")
+        cursor.execute(formatted_sql, batch_data)
+        result = cursor.fetchall()
+        results.extend(result)
+
+    print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} 查询执行完毕")
+    return results
+
+def save_file(filename: str, data: list, headers: list):
+    """将数据保存到 Excel 文件"""
+    print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} 开始写入文件")
     wwb = load_workbook(filename)  # 创建工作簿对象
-    ws = wwb.create_sheet('Mysheet')  # 创建子表
-    ws.append(['单号', 'url'])  # 添加表头
-    for data_list in picture_url:
-        ws.append(data_list)  # 每次写入一行
+    ws = wwb.create_sheet('newsheet')  # 创建子表
+    ws.append(headers)
+    for row in data:
+        ws.append(row)
     wwb.save(filename)
-    print(time.strftime('%Y-%m-%d %H:%M:%S'), "保存文件")
-
+    print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} 保存文件")
 
 if __name__ == '__main__':
-    if len(sys.argv) == 2:
-        filename = sys.argv[1]
-        # 创建一个空列表存放查询的结果
-        picture_url = []
-        # 连接数据库
-        oracle_connect(oracle_connect_string)
-        get_data()
-        # 关闭数据库连接
-        oracle_close()
-        save_file()
+    if len(sys.argv) != 2:
+        print(f'Usage: python {sys.argv[0]} file.xlsx')
+        sys.exit(1)
 
+    filename = sys.argv[1]
+    start_time = time.time()
+    
+    try:
+        with oracle_connect(oracle_connect_string) as conn:
+            cursor = conn.cursor()
+            data = get_data(cursor, filename)
+            headers = ['表头1', '表头2']  # 根据需要定制表头
+            save_file(filename, data, headers)  # 保存到原文件
+    except Exception as e:
+        print(f"发生错误: {e}")
+    finally:
         end_time = time.time()
         print("全部执行完毕")
-        print("耗时: {:.2f}秒".format(end_time - start_time))
-    else:
-        print('Usage: python %s file.xlsx' % sys.argv[0])
+        print(f"耗时: {end_time - start_time:.2f}秒")
+
+

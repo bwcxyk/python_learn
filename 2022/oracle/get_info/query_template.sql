@@ -1,3 +1,3 @@
-SELECT ROWNUM ROWNUM1, name, age
-FROM user
-WHERE name = :query
+SELECT *
+FROM your_table
+WHERE column_name IN ({})
