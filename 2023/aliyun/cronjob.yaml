@@ -4,7 +4,7 @@ metadata:
   name: aliyun
   namespace: default
 spec:
-  schedule: 0 0 * * *
+  schedule: '* * * * *'
   jobTemplate:
     spec:
       template:

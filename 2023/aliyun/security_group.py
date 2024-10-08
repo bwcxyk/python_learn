@@ -15,8 +15,10 @@ from aliyunsdkecs.request.v20140526 import DescribeSecurityGroupsRequest, Author
 from aliyunsdkecs.request.v20140526.RevokeSecurityGroupRequest import RevokeSecurityGroupRequest
 from dotenv import load_dotenv
 
-# 解析 .env 文件中的环境变量
+# 加载 .env 文件
 load_dotenv()
+
+# 读取环境变量
 access_key = os.getenv("access_key")
 access_secret = os.getenv('access_secret')
 region_id = os.getenv('region_id')
@@ -31,7 +33,14 @@ client = AcsClient(access_key, access_secret, region_id)
 redis_host = os.getenv('redis_host')
 redis_port = int(os.getenv('redis_port'))
 redis_pass = os.getenv('redis_password')
-redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=0, password=redis_pass, decode_responses=True)
+# redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=0, password=redis_pass, decode_responses=True)
+# 创建 Redis 客户端，根据是否有密码来决定是否传入 password 参数
+if redis_pass:
+    # 如果设置了密码，则使用密码
+    redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=0, password=redis_pass, decode_responses=True)
+else:
+    # 如果没有设置密码，则不使用密码
+    redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=0, decode_responses=True)
 
 
 def get_old_ip():
@@ -97,6 +106,7 @@ def add_authorization():
             print(f"端口{port}授权成功")
         except Exception as e:
             print(f"端口{port}授权失败: {e}")
+            exit()
 
 
 if __name__ == '__main__':
