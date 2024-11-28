@@ -19,7 +19,8 @@ import threading
 class GetCity(object):
     """爬取国家统计局省、市、区、街道、办事处五级地址"""
     # 地址
-    url = 'http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2017/'
+    url = 'http://www.stats.gov.cn/sj/tjbz/tjyqhdmhcxhfdm/2023/'
+
 
     def __init__(self):
         """初始化属性"""

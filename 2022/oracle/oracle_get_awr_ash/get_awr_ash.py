@@ -9,12 +9,12 @@
 # 读取配置文件，请一定要配置好哦，具体的配置说明请看 run_config_template.py 文件的说明
 from run_config import oracle_connect_string, oracle_connect_string2, save_folder
 from run_config import dbid, instance_number, awr_ash_timepoint, generate_awr, generate_ash
-import cx_Oracle
-cx_Oracle.init_oracle_client(lib_dir=r"D:\Program Files\instantclient_19_3")
+import oracledb
+oracledb.init_oracle_client(lib_dir=r"D:\Program Files\instantclient_19_3")
 
 
 def oracle_connect(connect_string: str):
-    conn = cx_Oracle.connect(connect_string)
+    conn = oracledb.connect(connect_string)
     cursor = conn.cursor()
     return conn, cursor
 
