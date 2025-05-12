@@ -1,7 +1,9 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
-__author__ = 'Fighter.Kun'
-__time__ = '2019/9x9/6 14:52'
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+"""
+@Author : yaokun
+@Time : 2020/9x9/4 15:03
+"""
 
 '''
 class MyClass:
@@ -51,4 +53,18 @@ p.speak()
 '''
 
 
+class test():
+    def __init__(self,data=1):
+        self.data = data
 
+    def __iter__(self):
+        return self
+    def __next__(self):
+        if self.data > 5:
+            raise StopIteration
+        else:
+            self.data+=1
+            return self.data
+
+for item in test(3):
+    print(item)

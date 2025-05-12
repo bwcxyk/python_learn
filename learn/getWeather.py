@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-__author__ = 'Fighter.Kun'
+__author__ = 'YaoKun'
 __time__ = '2019/11/15 15:05'
 
 import requests

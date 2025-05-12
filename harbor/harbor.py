@@ -1,7 +1,8 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = 'Fighter.Kun'
-__time__ = '2019/9x9/16 10:01'
+"""
+@Author  : YaoKun
+"""
 
 
 import requests
