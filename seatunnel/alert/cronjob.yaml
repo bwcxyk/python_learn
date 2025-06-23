@@ -1,0 +1,43 @@
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+  name: seatunnel-alert
+  labels:
+    app: alert
+spec:
+  schedule: '*/10 * * * *'
+  successfulJobsHistoryLimit: 3  # 保留3次成功记录
+  failedJobsHistoryLimit: 5      # 保留5次失败记录
+  jobTemplate:
+    metadata:
+      labels:
+        app: alert
+    spec:
+      template:
+        spec:
+          containers:
+            - name: alert
+              image: 'seatunnel-alert:1.0'
+              env:
+                - name: SERVER_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: seatunnel-alert
+                      key: SERVER_URL
+                - name: DINGTALK_TOKEN
+                  valueFrom:
+                    configMapKeyRef:
+                      name: seatunnel-alert
+                      key: DINGTALK_TOKEN
+                - name: DINGTALK_SECRET
+                  valueFrom:
+                    configMapKeyRef:
+                      name: seatunnel-alert
+                      key: DINGTALK_SECRET
+                - name: MONITOR_WINDOW_MINUTES
+                  valueFrom:
+                    configMapKeyRef:
+                      name: seatunnel-alert
+                      key: MONITOR_WINDOW_MINUTES
+              imagePullPolicy: Always
+          restartPolicy: Never
