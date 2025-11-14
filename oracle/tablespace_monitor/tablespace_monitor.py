@@ -71,8 +71,6 @@ ORDER BY total_mb DESC;
 def execute_sql_query(sql_query):
     try:
         # 在 CentOS7 Python3.6 下兼容写法
-        # linux定时任务
-        # . /home/oracle/.bash_profile; /usr/bin/python3 script.py
         cmd = 'sqlplus -s / as sysdba'
         result = subprocess.run(
             cmd,
